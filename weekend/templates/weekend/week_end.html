@@ -1,0 +1,105 @@
+{% load staticfiles %}
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script>
+            alert("hi");
+            $(document).ready(function(){
+                    var $today = new Date();
+                    var $dd = ($today.getDate() -1);
+                    var $mm = $today.getMonth() + 1; //January is 0!
+                    var $yyyy = $today.getFullYear();
+                    if ($dd < 10) {
+                      $dd = '0' + $dd;
+                    } 
+                    if ($mm < 10) {
+                      $mm = '0' + $mm;
+                    } 
+                    var $yesterday = $dd + '/' + $mm + '/' + $yyyy;
+                
+                $("#high").click(function(){
+                $('#cont').html("");
+                $.ajax({
+                    url: '/weekend/high/',
+                    method: 'GET',
+                    dataType:'json',
+                    success: function (data) {
+                            console.log(data);
+                            $.each(data, function(key,value) {
+                                $('#cont').append("<h3>"+ key+ ":"+ "</h3>");
+                                $('#cont').append(`<table class="table">
+                                                  <thead>
+                                                  <tr>
+                                                  <th>Stock</th>
+                                                  <th>High</th>
+                                                  <th>Date</th>
+                                                  </tr>
+                                                  </thead>
+                                                  <tbody class = "tbody" id =`+key+` >
+                                                  </tbody> 
+                                                  </table>`);
+                                console.log(key);
+                                $.each(data[key], function(key1,value1) {
+                                    $('#'+key).append(`<tr><td>`+key1+`</td><td>`+value1+`</td><td>`+$yesterday+`</td></tr>`);
+                                });
+                            }); 
+                            }
+                });
+                });
+                
+                $("#low").click(function(){
+                $('#cont').html("");
+                $.ajax({
+                    url: '/weekend/low/',
+                    method: 'GET',
+                    dataType:'json',
+                    success: function (data) {
+                            console.log(data);
+                            $.each(data, function(key,value) {
+                                $('#cont').append("<h3>"+ key+ ":"+ "</h3>");
+                                $('#cont').append(`<table class="table">
+                                                  <thead>
+                                                  <tr>
+                                                  <th>Stock</th>
+                                                  <th>Low</th>
+                                                  <th>Date</th>
+                                                  </tr>
+                                                  </thead>
+                                                  <tbody class = "tbody" id =`+key+` >
+                                                  </tbody> 
+                                                  </table>`);
+                                console.log(key);
+                                $.each(data[key], function(key1,value1) {
+                                    $('#'+key).append(`<tr><td>`+key1+`</td><td>`+value1+`</td><td>`+$yesterday+`</td></tr>`);
+                                });
+                            }); 
+                            }
+                });
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div class="jumbotron text-center">
+            <h1>Weekend</h1>
+        </div>
+        
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Weekend
+            <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <li><a id = "high" href="#"> High</a></li>
+                <li><a id = "low" href="#">Low</a></li>
+            </ul>
+        </div>
+ 
+               
+            <div class="container" id = "cont">
+                
+            </div>
+        
+    </body>
+</html>
+        
